@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -10,7 +9,6 @@ import (
 )
 
 func (app *application) createMovieHandler(w http.ResponseWriter, r *http.Request) {
-
 	var input struct {
 		Title   string   `json:"title"`
 		Year    int32    `json:"year"`
@@ -19,14 +17,13 @@ func (app *application) createMovieHandler(w http.ResponseWriter, r *http.Reques
 	}
 
 	// When calling Decode() you must pass a non-nil pointer as the target decode destination. if not it will return json.InvalidUnmarshalError
-	err := json.NewDecoder(r.Body).Decode(&input)
+	err := app.readJSON(w, r, &input)
 	if err != nil {
-		app.errorResponse(w, r, http.StatusBadRequest, err.Error())
+		app.badRequestResponse(w, r, err)
 		return
 	}
 
 	fmt.Fprintf(w, "%+v\n", input)
-
 }
 
 func (app *application) showMovieHandler(w http.ResponseWriter, r *http.Request) {
