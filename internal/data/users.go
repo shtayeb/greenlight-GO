@@ -20,6 +20,8 @@ type UserModel struct {
 	DB *sql.DB
 }
 
+var AnonymousUser = &User{}
+
 // Note: When creating a bcrypt hash the input is truncated to a
 // maximum of 72 bytes. So, if someone uses a very long
 // password, it means that any bytes after that would effectively
@@ -41,6 +43,10 @@ type User struct {
 type password struct {
 	plaintext *string
 	hash      []byte
+}
+
+func (u *User) IsAnonymous() bool {
+	return u == AnonymousUser
 }
 
 // The Set() method calculates the bcrypt hash of a plaintext password, and stores both
