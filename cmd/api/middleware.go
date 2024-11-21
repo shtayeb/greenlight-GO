@@ -165,3 +165,35 @@ func (app *application) authenticate(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
+
+func (app *application) requireAuthenticatedUser(next http.HandlerFunc) http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		user := app.contextGetUser(r)
+
+		if user.IsAnonymous() {
+			app.authenticationRequiredResponse(w, r)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
+// Checks that a user is both authenticated and activated.
+// It returns http.HandlerFunc -> so we can easily wrap another handler in it
+func (app *application) requireActivatedUser(next http.HandlerFunc) http.HandlerFunc {
+	// Rather than returning this http.HandlerFunc we assign it to the variable fn
+	fn := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		user := app.contextGetUser(r)
+
+		if !user.Activated {
+			app.inactiveAccountResponse(w, r)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+
+	// wraps fn with requireAuthenticatedUser() middleware before returing it
+	return app.requireAuthenticatedUser(fn)
+}
