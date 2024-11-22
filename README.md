@@ -75,3 +75,8 @@ To test requests
 ```shell
 go install github.com/rakyll/hey@master
 ```
+
+Staticcheck for audit command
+```shell
+go install honnef.co/go/tools/cmd/staticcheck@latest 
+```
