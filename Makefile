@@ -62,3 +62,17 @@ audit:
 	@echo 'Running tests...'
 	go test -race -vet=off ./...
 
+## vender: tidy and vendor dependencies
+.PHONY: vendor
+vender:
+	@echo 'Tidying and verifiying module dependencies...'
+	go mod tidy
+	go mod verify
+	@echo 'Vendoring dependencies...'
+	go mod vender
+
+
+
+
+
+
