@@ -6,6 +6,7 @@ import (
 	"crypto/sha256"
 	"database/sql"
 	"encoding/base32"
+	"net/http"
 	"time"
 
 	"github.com/shtayeb/greenlight/internal/validator"
@@ -13,6 +14,7 @@ import (
 
 const ScopeActivation = "activation"
 const ScopeAuthentication = "authentication"
+const ScopePasswordReset = "password-reset"
 
 type Token struct {
 	Plaintext string    `json:"token"`
