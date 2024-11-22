@@ -69,3 +69,9 @@ Usage of /tmp/go-build1036895751/b001/exe/api:
   -smtp-username string
         SMTP username
 ```
+
+## Others
+To test requests
+```shell
+go install github.com/rakyll/hey@master
+```
